@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: django06g8e
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./media:/app/media
+      - ./templates:/app/templates
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root_password
+      - MYSQL_DATABASE=django06g8e
+    command: >
+      sh -c "python collections_patch.py &&
+             python docker_image_fix.sh &&
+             python manage.py runserver 0.0.0.0:8080"
+
+volumes:
+  mysql_data: 

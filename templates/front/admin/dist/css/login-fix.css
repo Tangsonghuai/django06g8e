@@ -1,0 +1,98 @@
+/* 自定义CSS以修复登录页面的问题 */
+/* 通用容器样式 */
+.container {
+  min-height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* 登录表单容器 */
+.login-form {
+  width: 400px !important;
+  background-color: #fff !important;
+  border-radius: 4px !important;
+  padding: 30px !important;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 标题容器 */
+.title-container {
+  margin-bottom: 30px !important;
+  text-align: center !important;
+}
+
+/* 标题文本 */
+.title-container .title {
+  font-size: 26px !important;
+  color: #333 !important;
+  margin: 0 !important;
+  font-weight: bold !important;
+}
+
+/* 输入框样式 */
+.el-input {
+  margin-bottom: 20px !important;
+}
+.el-input input {
+  height: 40px !important;
+  padding-left: 15px !important;
+}
+
+/* 登录按钮 */
+.loginInBt {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background-color: #409EFF !important;
+  color: white !important;
+  border-color: #409EFF !important;
+  border-radius: 4px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  margin: 20px 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+
+/* 注册按钮 */
+.register {
+  display: block !important;
+  visibility: visible !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  color: #409EFF !important;
+  margin-top: 15px !important;
+}
+
+/* 角色选择 */
+.el-radio {
+  display: inline-flex !important;
+  margin-right: 20px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 图标 */
+.svg-container {
+  color: #889aa4 !important;
+}
+
+/* 确保所有表单项可见 */
+.el-form-item {
+  margin-bottom: 22px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 修复注册标题 */
+.h1 {
+  font-size: 26px !important;
+  color: #333 !important;
+  margin-bottom: 30px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+} 

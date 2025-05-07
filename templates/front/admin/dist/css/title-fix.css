@@ -1,0 +1,82 @@
+/* 修复标题显示问题的专用CSS */
+
+/* 全局标题样式修复 */
+h1, h2, h3, h4, .title, .navbar-brand, .welcome-text {
+  position: relative !important;
+  z-index: 2 !important;
+  background: none !important;
+  text-shadow: none !important;
+}
+
+/* 特别处理顶部导航栏标题 */
+header h1, 
+header .title, 
+.navbar-brand,
+.el-menu-item,
+.sidebar-title {
+  background-color: transparent !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 处理欢迎页面的大标题 */
+.welcome-text {
+  overflow: visible !important;
+  background: none !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 确保所有可能的标题容器都不会叠加显示 */
+.title-container .title,
+.el-form-item__label,
+.el-table th,
+.el-dialog__title,
+.el-menu-item {
+  position: relative !important;
+  z-index: 2 !important;
+  background: none !important;
+}
+
+/* 修复登录和注册页面标题 */
+.login-container .title,
+.register-container .title,
+.h1 {
+  color: #333 !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  position: relative !important;
+  z-index: 2 !important;
+  background: white !important;
+  padding: 10px !important;
+  margin-bottom: 20px !important;
+  text-align: center !important;
+}
+
+/* 修复正文内容中的标题引用 */
+.content-wrapper h1,
+.content-wrapper h2,
+.content-wrapper h3 {
+  position: relative !important;
+  z-index: 2 !important;
+  background: none !important;
+  color: #333 !important;
+}
+
+/* 确保登录按钮正确显示 */
+.loginInBt {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background-color: #409EFF !important;
+  color: white !important;
+  border-color: #409EFF !important;
+  border-radius: 4px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  margin: 20px 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+} 

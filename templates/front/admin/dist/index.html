@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="./favicon.ico"><title>工艺品交易系统</title><link href="./css/app.a10300a6.css" rel="preload" as="style"><link href="./css/chunk-vendors.1f0a25b2.css" rel="preload" as="style"><link href="./js/app.7f78409b.js" rel="preload" as="script"><link href="./js/chunk-vendors.5bc361da.js" rel="preload" as="script"><link href="./css/chunk-vendors.1f0a25b2.css" rel="stylesheet"><link href="./css/app.a10300a6.css" rel="stylesheet"><link href="./css/login-fix.css" rel="stylesheet"><link href="./css/title-fix.css" rel="stylesheet">
+<script>
+// 直接在HTML中定义替换函数
+window.onload = function() {
+  // 替换页面标题
+  if (document.title.includes("中国传统手工艺销售平台")) {
+    document.title = document.title.replace(/中国传统手工艺销售平台/g, "工艺品交易系统");
+  }
+  
+  setTimeout(function() {
+    // 查找并替换所有标题文本
+    document.querySelectorAll('.title, .h1, h1, h2, h3, h4, .welcome-text, .navbar-brand').forEach(function(el) {
+      if (el.textContent.includes('中国传统手工艺销售平台')) {
+        el.textContent = el.textContent.replace('中国传统手工艺销售平台', '工艺品交易系统');
+        // 确保文本显示正常
+        el.style.position = 'relative';
+        el.style.zIndex = '2';
+        el.style.background = 'none';
+        el.style.textShadow = 'none';
+      }
+    });
+    
+    // 确保登录按钮可见
+    var loginBtn = document.querySelector('.loginInBt');
+    if (loginBtn) {
+      loginBtn.style.display = 'block';
+      loginBtn.style.visibility = 'visible';
+      loginBtn.style.backgroundColor = '#409EFF';
+      loginBtn.style.color = 'white';
+    }
+  }, 300);
+};
+</script>
+</head><body><noscript><strong>We're sorry but mas-creator-admin doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script src="./js/chunk-vendors.5bc361da.js"></script><script src="./js/app.7f78409b.js"></script><script src="./js/app-override.js"></script><script src="./js/app-patch.js"></script><script src="./js/login-redirect.js"></script></body></html>
