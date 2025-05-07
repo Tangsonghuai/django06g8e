@@ -107,7 +107,7 @@ RUN apt-get update && apt-get install -y \
     default-libmysqlclient-dev \
     build-essential \
     pkg-config \
-    netcat \
+    netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制依赖文件
