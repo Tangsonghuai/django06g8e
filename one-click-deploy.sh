@@ -96,6 +96,49 @@ volumes:
   mysql_data:
 EOL
 
+# 创建媒体URL配置脚本
+echo "[5.5/7] 创建媒体URL配置脚本..."
+cat > media_url_config.py << 'EOL'
+#!/usr/bin/env python
+import os
+
+# 要修改的文件
+filepath = "dj2/urls.py"
+
+# 读取文件内容
+with open(filepath, 'r') as file:
+    content = file.read()
+
+# 导入需要的模块
+if "from dj2.settings import MEDIA_ROOT" not in content:
+    content = content.replace(
+        "from dj2.settings import dbName as schemaName", 
+        "from dj2.settings import dbName as schemaName\nfrom dj2.settings import MEDIA_ROOT, MEDIA_URL"
+    )
+
+# 添加媒体URL配置
+if "re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})" not in content:
+    if "path(r'null',views.null)," in content:
+        content = content.replace(
+            "path(r'null',views.null),", 
+            "path(r'null',views.null),\n    # 添加媒体文件的URL配置\n    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),"
+        )
+    else:
+        # 在urlpatterns列表的末尾添加
+        content = content.replace(
+            "]", 
+            "    # 添加媒体文件的URL配置\n    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),\n]"
+        )
+
+# 写回文件
+with open(filepath, 'w') as file:
+    file.write(content)
+
+print("媒体URL配置已更新")
+EOL
+
+chmod +x media_url_config.py
+
 # 6. 创建简化版的Dockerfile
 echo "[6/7] 创建Dockerfile..."
 cat > Dockerfile.simple << 'EOL'
@@ -146,22 +189,12 @@ cp /app/config-docker.ini /app/config.ini\n\
 # 运行图片修复脚本\n\
 bash /app/docker_image_fix.sh\n\
 \n\
-# 创建访问媒体文件的URL配置\n\
-echo "修改dj2/urls.py添加媒体文件URL配置..."\n\
-if ! grep -q "from dj2.settings import MEDIA_ROOT" /app/dj2/urls.py; then\n\
-  sed -i "s/from dj2.settings import dbName as schemaName/from dj2.settings import dbName as schemaName\\nfrom dj2.settings import MEDIA_ROOT, MEDIA_URL/g" /app/dj2/urls.py\n\
-  sed -i "/path(r'\''null'\''.*)/a\\    # 添加媒体文件的URL配置\\n    re_path(r'\''^media/(?P<path>.*)$'\\'', serve, {\\'document_root\\': MEDIA_ROOT})," /app/dj2/urls.py\n\
-  echo "已添加媒体文件URL配置"\n\
-else\n\
-  echo "媒体文件URL配置已存在"\n\
-fi\n\
+# 设置媒体文件URL\n\
+python /app/media_url_config.py\n\
 \n\
-# 检查media目录权限\n\
-echo "确保media目录权限正确..."\n\
+# 确保media目录权限正确\n\
 chmod -R 755 /app/media\n\
-ls -la /app/media\n\
-ls -la /app/media/upload\n\
-ls -la /app/media/front\n\
+echo "媒体目录权限已设置"\n\
 \n\
 # 启动Django应用\n\
 echo "启动Django应用..."\n\
