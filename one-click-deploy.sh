@@ -90,6 +90,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root_password
       - MYSQL_DATABASE=django06g8e
+      - DEBUG=1
 
 volumes:
   mysql_data:
@@ -125,6 +126,7 @@ COPY . .
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8080
+ENV DEBUG=1
 
 # 应用collections补丁
 RUN python collections_patch.py
@@ -144,7 +146,25 @@ cp /app/config-docker.ini /app/config.ini\n\
 # 运行图片修复脚本\n\
 bash /app/docker_image_fix.sh\n\
 \n\
+# 创建访问媒体文件的URL配置\n\
+echo "修改dj2/urls.py添加媒体文件URL配置..."\n\
+if ! grep -q "from dj2.settings import MEDIA_ROOT" /app/dj2/urls.py; then\n\
+  sed -i "s/from dj2.settings import dbName as schemaName/from dj2.settings import dbName as schemaName\\nfrom dj2.settings import MEDIA_ROOT, MEDIA_URL/g" /app/dj2/urls.py\n\
+  sed -i "/path(r'\''null'\''.*)/a\\    # 添加媒体文件的URL配置\\n    re_path(r'\''^media/(?P<path>.*)$'\\'', serve, {\\'document_root\\': MEDIA_ROOT})," /app/dj2/urls.py\n\
+  echo "已添加媒体文件URL配置"\n\
+else\n\
+  echo "媒体文件URL配置已存在"\n\
+fi\n\
+\n\
+# 检查media目录权限\n\
+echo "确保media目录权限正确..."\n\
+chmod -R 755 /app/media\n\
+ls -la /app/media\n\
+ls -la /app/media/upload\n\
+ls -la /app/media/front\n\
+\n\
 # 启动Django应用\n\
+echo "启动Django应用..."\n\
 python manage.py runserver 0.0.0.0:8080\n\
 ' > /app/start.sh
 

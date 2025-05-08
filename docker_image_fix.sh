@@ -155,4 +155,62 @@ if [ -f "db/django06g8e.sql" ]; then
     fi
 else
     print_error "找不到SQL文件：db/django06g8e.sql"
-fi 
+fi
+
+# 7. 检查和添加媒体文件URL配置
+print_info "检查媒体文件URL配置..."
+if [ -f "dj2/urls.py" ]; then
+    # 添加URL服务函数直接到urls.py文件
+    print_info "确保媒体文件URL配置存在..."
+    
+    # 创建临时文件
+    cat > media_url_patch.py << 'EOL'
+#!/usr/bin/env python
+import os
+
+# 要修改的文件
+filepath = "dj2/urls.py"
+
+# 读取文件内容
+with open(filepath, 'r') as file:
+    content = file.read()
+
+# 导入需要的模块
+if "from dj2.settings import MEDIA_ROOT" not in content:
+    content = content.replace(
+        "from dj2.settings import dbName as schemaName", 
+        "from dj2.settings import dbName as schemaName\nfrom dj2.settings import MEDIA_ROOT, MEDIA_URL"
+    )
+
+# 添加媒体URL配置
+if "re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT})" not in content:
+    if "path(r'null',views.null)," in content:
+        content = content.replace(
+            "path(r'null',views.null),", 
+            "path(r'null',views.null),\n    # 添加媒体文件的URL配置\n    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),"
+        )
+    else:
+        # 在urlpatterns列表的末尾添加
+        content = content.replace(
+            "]", 
+            "    # 添加媒体文件的URL配置\n    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),\n]"
+        )
+
+# 写回文件
+with open(filepath, 'w') as file:
+    file.write(content)
+
+print("媒体URL配置已更新")
+EOL
+
+    # 执行Python脚本更新urls.py
+    chmod +x media_url_patch.py
+    python media_url_patch.py
+    rm media_url_patch.py
+    
+    print_success "媒体文件URL配置检查完成"
+else
+    print_error "找不到文件：dj2/urls.py"
+fi
+
+print_info "媒体文件路径检查完成，如果图片仍然无法显示，请检查浏览器控制台中的网络请求。" 
