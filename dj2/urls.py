@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 
 from . import views
 from dj2.settings import dbName as schemaName
+from dj2.settings import MEDIA_ROOT, MEDIA_URL
 
 urlpatterns = [
     path('xadmin/', admin.site.urls),
@@ -74,6 +75,8 @@ urlpatterns = [
     re_path(r'img/(?P<p1>.*)$', views.img1),
     path(r'test/<str:p1>/',views.test),
     path(r'null',views.null),
+    # 添加媒体文件的URL配置
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]
 
 #判断admin使用vue还是jquery
