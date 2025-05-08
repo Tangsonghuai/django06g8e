@@ -27,6 +27,8 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root_password
       - MYSQL_DATABASE=django06g8e
+      - SITE_DOMAIN=${SITE_DOMAIN:-localhost}
+      - PORT=8080
     volumes:
       - ./media:/app/media
       - ./templates:/app/templates
