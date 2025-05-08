@@ -108,6 +108,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     pkg-config \
     netcat-traditional \
+    mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制依赖文件

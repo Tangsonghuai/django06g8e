@@ -137,4 +137,22 @@ if [ "$(find media/upload -name "*.jpg" | wc -l)" -gt 0 ] && [ "$(find media/fro
     echo "- ./media:/app/media"
 else
     print_error "图片修复可能未成功完成。请检查日志。"
+fi
+
+# 6. 导入SQL数据
+if [ -f "db/django06g8e.sql" ]; then
+    print_info "正在导入数据库SQL文件..."
+    # 在容器内执行时，使用容器内的数据库配置
+    if [ -f "/.dockerenv" ]; then
+        mysql -h db -u root -proot_password django06g8e < db/django06g8e.sql
+        if [ $? -eq 0 ]; then
+            print_success "SQL数据导入完成！"
+        else
+            print_error "SQL数据导入失败！请检查日志和数据库连接。"
+        fi
+    else
+        print_warning "当前不在Docker容器内，跳过SQL导入步骤。"
+    fi
+else
+    print_error "找不到SQL文件：db/django06g8e.sql"
 fi 
